@@ -1,4 +1,5 @@
 import sys
+import os
 ac = 0
 mq = 0
 mbr = 0
@@ -22,20 +23,20 @@ def read_mem(addr):
 
 def write_mem(addr, val):
     try:
+
         with open("binary.txt", "r") as f:
             lines = f.readlines()
-        
         while len(lines) <= addr:
             lines.append("0" * 40 + "\n")
-            
         lines[addr] = val + "\n"
-        
         with open("binary.txt", "w") as f:
             f.writelines(lines)
-    except:
-        print("Error: Could not write to binary.txt")
+            f.flush()      
+            os.fsync(f.fileno())             
+    except Exception as e:
+        print(f"Error writing to file: {e}")
         sys.exit(1)
-
+        
 def to_int(binary_str):
     val = int(binary_str, 2)
     if binary_str[0] == '1':
@@ -48,11 +49,9 @@ def to_bin(val, bits):
     return format(val, fmt)
 
 def print_registers():
-    print("-" * 40)
     print("PC  : " + to_bin(pc, 12))
     print("AC  : " + to_bin(ac, 40))
     print("MQ  : " + to_bin(mq, 40))
-    # Shift IR to show only the 8-bit Opcode
     print("IR  : " + to_bin(ir >> 12, 8))
     print("MBR : " + to_bin(mbr, 40))
     print("MAR : " + to_bin(mar, 12))
