@@ -30,10 +30,7 @@ The project consists of two components:
 ---
 
 ## Requirements
-
-- Python 3.x
-
----
+ Python 3.x
 
 ## Execution Procedure
 
